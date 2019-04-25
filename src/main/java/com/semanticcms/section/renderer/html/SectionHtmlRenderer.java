@@ -1,6 +1,6 @@
 /*
  * semanticcms-section-renderer-html - Sections rendered as HTML in a Servlet environment.
- * Copyright (C) 2013, 2014, 2015, 2016, 2017  AO Industries, Inc.
+ * Copyright (C) 2013, 2014, 2015, 2016, 2017, 2019  AO Industries, Inc.
  *     support@aoindustries.com
  *     7262 Bull Pen Cir
  *     Mobile, AL 36695
@@ -57,13 +57,7 @@ final public class SectionHtmlRenderer {
 						out,
 						Collections.singletonMap("page", page)
 					);
-				} catch(IOException e) {
-					throw e;
-				} catch(ServletException e) {
-					throw e;
-				} catch(SkipPageException e) {
-					throw e;
-				} catch(RuntimeException e) {
+				} catch(IOException | ServletException | SkipPageException | RuntimeException e) {
 					throw e;
 				} catch(Exception e) {
 					throw new ServletException(e);
