@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 semanticcms-section-renderer-html - Sections rendered as HTML in a Servlet environment.
-Copyright (C) 2013, 2014, 2015, 2016, 2017  AO Industries, Inc.
+Copyright (C) 2013, 2014, 2015, 2016, 2017, 2019  AO Industries, Inc.
 	support@aoindustries.com
 	7262 Bull Pen Cir
 	Mobile, AL 36695
@@ -41,10 +41,10 @@ Arguments:
 	<!-- Use explicit toc setting or determine auto mode.  In auto mode show when >= 3 total sections in page. -->
 	<c:if test="${
 		page.toc==null
-		? (fn:length(core:filterElements(page, 'com.semanticcms.section.model.Section')) ge 3)
+		? (fn:length(core:filterElements(page, 'com.semanticcms.section.model.SectioningContent')) ge 3)
 		: page.toc
 	}">
-		<c:set var="pageSections" value="${core:findTopLevelElements(page, 'com.semanticcms.section.model.Section')}" />
+		<c:set var="pageSections" value="${core:findTopLevelElements(page, 'com.semanticcms.section.model.SectioningContent')}" />
 		<c:if test="${!empty pageSections}">
 			<nav class="semanticcms-section-toc">
 				<!-- Is it OK to put h1 inside nav, this was div before? -->
@@ -60,7 +60,7 @@ Arguments:
 								<ao:out value="${h2.label}" />
 							</ao:a>
 							<c:if test="${page.tocLevels ge 2}">
-								<c:set var="h2Sections" value="${core:findTopLevelElements(h2, 'com.semanticcms.section.model.Section')}" />
+								<c:set var="h2Sections" value="${core:findTopLevelElements(h2, 'com.semanticcms.section.model.SectioningContent')}" />
 								<c:if test="${!empty h2Sections}">
 									<!-- Write h3 headings -->
 									<ol class="semanticcms-section-toc2ol">
@@ -72,7 +72,7 @@ Arguments:
 													<ao:out value="${h3.label}" />
 												</ao:a>
 												<c:if test="${page.tocLevels ge 3}">
-													<c:set var="h3Sections" value="${core:findTopLevelElements(h3, 'com.semanticcms.section.model.Section')}" />
+													<c:set var="h3Sections" value="${core:findTopLevelElements(h3, 'com.semanticcms.section.model.SectioningContent')}" />
 													<c:if test="${!empty h3Sections}">
 														<!-- Write h4 headings -->
 														<ol class="semanticcms-section-toc3ol">
@@ -84,7 +84,7 @@ Arguments:
 																		<ao:out value="${h4.label}" />
 																	</ao:a>
 																	<c:if test="${page.tocLevels ge 4}">
-																		<c:set var="h4Sections" value="${core:findTopLevelElements(h4, 'com.semanticcms.section.model.Section')}" />
+																		<c:set var="h4Sections" value="${core:findTopLevelElements(h4, 'com.semanticcms.section.model.SectioningContent')}" />
 																		<c:if test="${!empty h4Sections}">
 																			<!-- Write h5 headings -->
 																			<ol class="semanticcms-section-toc4ol">
@@ -96,7 +96,7 @@ Arguments:
 																							<ao:out value="${h5.label}" />
 																						</ao:a>
 																						<c:if test="${page.tocLevels ge 5}">
-																							<c:set var="h5Sections" value="${core:findTopLevelElements(h5, 'com.semanticcms.section.model.Section')}" />
+																							<c:set var="h5Sections" value="${core:findTopLevelElements(h5, 'com.semanticcms.section.model.SectioningContent')}" />
 																							<c:if test="${!empty h5Sections}">
 																								<!-- Write h6 headings -->
 																								<ol class="semanticcms-section-toc5ol">

@@ -30,7 +30,10 @@ import com.semanticcms.core.model.ElementContext;
 import com.semanticcms.core.model.NodeBodyWriter;
 import com.semanticcms.core.model.Page;
 import com.semanticcms.core.renderer.html.PageIndex;
+import com.semanticcms.section.model.Aside;
+import com.semanticcms.section.model.Nav;
 import com.semanticcms.section.model.Section;
+import com.semanticcms.section.model.SectioningContent;
 import java.io.IOException;
 import java.io.Writer;
 import java.util.Collections;
@@ -38,19 +41,21 @@ import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.jsp.SkipPageException;
 
+// TODO: Implement with https://www.w3.org/TR/wai-aria-1.1/#aria-label
 final public class SectionHtmlRenderer {
 
-	public static void writeSection(
+	public static void writeSectioningContent(
 		Writer out,
 		ElementContext context,
-		Section section,
+		SectioningContent sectioningContent,
+		String htmlElement,
 		PageIndex pageIndex
 	) throws IOException, ServletException, SkipPageException {
-		// If this is the first section in the page, write the table of contents
-		Page page = section.getPage();
+		// If this is the first sectioning content in the page, write the table of contents
+		Page page = sectioningContent.getPage();
 		if(page != null) {
-			List<Section> topLevelSections = page.findTopLevelElements(Section.class);
-			if(!topLevelSections.isEmpty() && topLevelSections.get(0) == section) {
+			List<SectioningContent> topLevelSectioningContents = page.findTopLevelElements(SectioningContent.class);
+			if(!topLevelSectioningContents.isEmpty() && topLevelSectioningContents.get(0) == sectioningContent) {
 				try {
 					context.include(
 						"/semanticcms-section-renderer-html/toc.inc.jspx",
@@ -64,44 +69,75 @@ final public class SectionHtmlRenderer {
 				}
 			}
 		}
-		// Count the section level by finding all sections in the parent elements
-		int sectionLevel = 2; // <h1> is reserved for page titles
-		com.semanticcms.core.model.Element parentElement = section.getParentElement();
+		// Count the sectioning level by finding all sectioning contents in the parent elements
+		int sectioningLevel = 2; // <h1> is reserved for page titles
+		com.semanticcms.core.model.Element parentElement = sectioningContent.getParentElement();
 		while(parentElement != null) {
-			if(parentElement instanceof Section) sectionLevel++;
+			if(parentElement instanceof SectioningContent) sectioningLevel++;
 			parentElement = parentElement.getParentElement();
 		}
 		// Highest tag is <h6>
-		if(sectionLevel > 6) throw new IOException("Sections exceeded depth of h6 (including page as h1): sectionLevel = " + sectionLevel);
+		if(sectioningLevel > 6) throw new IOException("Sectioning exceeded depth of h6 (including page as h1): sectioningLevel = " + sectioningLevel);
 
-		out.write("<section><h");
-		char sectionLevelChar = (char)('0' + sectionLevel);
-		out.write(sectionLevelChar);
-		String id = section.getId();
+		out.write('<');
+		out.write(htmlElement);
+		out.write("><h");
+		char sectioningLevelChar = (char)('0' + sectioningLevel);
+		out.write(sectioningLevelChar);
+		String id = sectioningContent.getId();
 		if(id != null) {
 			out.write(" id=\"");
 			PageIndex.appendIdInPage(
 				pageIndex,
-				section.getPage(),
+				sectioningContent.getPage(),
 				id,
 				new MediaWriter(textInXhtmlAttributeEncoder, out)
 			);
 			out.write('"');
 		}
 		out.write('>');
-		encodeTextInXhtml(section.getLabel(), out);
+		encodeTextInXhtml(sectioningContent.getLabel(), out);
 		out.write("</h");
-		out.write(sectionLevelChar);
+		out.write(sectioningLevelChar);
 		out.write('>');
-		BufferResult body = section.getBody();
+		BufferResult body = sectioningContent.getBody();
 		if(body.getLength() > 0) {
 			out.write("<div class=\"h");
-			out.write(sectionLevelChar);
+			out.write(sectioningLevelChar);
 			out.write("Content\">");
-			body.writeTo(new NodeBodyWriter(section, out, context));
+			body.writeTo(new NodeBodyWriter(sectioningContent, out, context));
 			out.write("</div>");
 		}
-		out.write("</section>");
+		out.write("</");
+		out.write(htmlElement);
+		out.write('>');
+	}
+
+	public static void writeAside(
+		Writer out,
+		ElementContext context,
+		Aside aside,
+		PageIndex pageIndex
+	) throws IOException, ServletException, SkipPageException {
+		writeSectioningContent(out, context, aside, "aside", pageIndex);
+	}
+
+	public static void writeNav(
+		Writer out,
+		ElementContext context,
+		Nav nav,
+		PageIndex pageIndex
+	) throws IOException, ServletException, SkipPageException {
+		writeSectioningContent(out, context, nav, "nav", pageIndex);
+	}
+
+	public static void writeSection(
+		Writer out,
+		ElementContext context,
+		Section section,
+		PageIndex pageIndex
+	) throws IOException, ServletException, SkipPageException {
+		writeSectioningContent(out, context, section, "section", pageIndex);
 	}
 
 	/**

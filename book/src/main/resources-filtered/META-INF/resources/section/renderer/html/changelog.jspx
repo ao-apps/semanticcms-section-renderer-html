@@ -37,6 +37,7 @@ along with semanticcms-section-renderer-html.  If not, see <http://www.gnu.org/l
 		shortTitle="Changelog"
 		tocLevels="1"
 		datePublished="2017-08-26T18:09:41-0500"
+		dateModified="2019-06-01T18:51:51-0500"
 	>
 		<!-- The current snapshot, unreleased version -->
 		<c:set var="version" value="@{com.semanticcms:semanticcms-section-renderer-html:pom.version}" />
@@ -56,6 +57,24 @@ along with semanticcms-section-renderer-html.  If not, see <http://www.gnu.org/l
 					<li>
 						New module separating <core:link book="/core/renderer/html" page="/">HTML Renderers</core:link>
 						for <core:link book="/" page="/" /> 2.
+					</li>
+					<li>
+						<p>
+							Implemented additional <ao:a href="https://www.w3.org/TR/html5/dom.html#sectioning-content">HTML 5.2 Sectioning content</ao:a>,
+							with each still acting as a section for things like page outlines and table of contents, but which use more appropriate
+							HTML 5 semantic elements:
+						</p>
+						<ol>
+							<li><ao:a href="https://www.w3.org/TR/html5/sections.html#the-section-element"><![CDATA[&lt;section&gt;]]></ao:a>
+								(this was previously the only supported type of section)
+							</li>
+							<li><ao:a href="https://www.w3.org/TR/html5/sections.html#the-nav-element"><![CDATA[&lt;nav&gt;]]></ao:a></li>
+							<li><ao:a href="https://www.w3.org/TR/html5/sections.html#the-aside-element"><![CDATA[&lt;aside&gt;]]></ao:a></li>
+						</ol>
+						<p>
+							Please note that <ao:a href="https://www.w3.org/TR/html5/sections.html#the-article-element"><![CDATA[&lt;article&gt;]]></ao:a>
+							is not included.  The article is already created by the active view, and nested articles are not supported.
+						</p>
 					</li>
 				</ul>
 			</changelog:release>
