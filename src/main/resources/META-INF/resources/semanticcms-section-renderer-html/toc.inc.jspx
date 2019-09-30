@@ -54,7 +54,7 @@ Arguments:
 				<ol class="semanticcms-section-toc1ol">
 					<c:forEach var="h2" items="${pageSections}" varStatus="h2Status">
 						<li class="semanticcms-section-toc1li">
-							<ao:a href="#${fn:escapeXml(core:getRefIdInPage(page, h2.id))}">
+							<ao:a href="#${ao:encodeFragment(core:getRefIdInPage(page, h2.id))}">
 								<ao:out value="${h2Status.index+1}" />
 								<ao:out value=" " />
 								<ao:out value="${h2.label}" />
@@ -66,7 +66,7 @@ Arguments:
 									<ol class="semanticcms-section-toc2ol">
 										<c:forEach var="h3" items="${h2Sections}" varStatus="h3Status">
 											<li class="semanticcms-section-toc2li">
-												<ao:a href="#${fn:escapeXml(core:getRefIdInPage(page, h3.id))}">
+												<ao:a href="#${ao:encodeFragment(core:getRefIdInPage(page, h3.id))}">
 													<ao:out value="${h2Status.index+1}.${h3Status.index+1}" />
 													<ao:out value=" " />
 													<ao:out value="${h3.label}" />
@@ -78,7 +78,7 @@ Arguments:
 														<ol class="semanticcms-section-toc3ol">
 															<c:forEach var="h4" items="${h3Sections}" varStatus="h4Status">
 																<li class="semanticcms-section-toc3li">
-																	<ao:a href="#${fn:escapeXml(core:getRefIdInPage(page, h4.id))}">
+																	<ao:a href="#${ao:encodeFragment(core:getRefIdInPage(page, h4.id))}">
 																		<ao:out value="${h2Status.index+1}.${h3Status.index+1}.${h4Status.index+1}" />
 																		<ao:out value=" " />
 																		<ao:out value="${h4.label}" />
@@ -90,7 +90,7 @@ Arguments:
 																			<ol class="semanticcms-section-toc4ol">
 																				<c:forEach var="h5" items="${h4Sections}" varStatus="h5Status">
 																					<li class="semanticcms-section-toc4li">
-																						<ao:a href="#${fn:escapeXml(core:getRefIdInPage(page, h5.id))}">
+																						<ao:a href="#${ao:encodeFragment(core:getRefIdInPage(page, h5.id))}">
 																							<ao:out value="${h2Status.index+1}.${h3Status.index+1}.${h4Status.index+1}.${h5Status.index+1}" />
 																							<ao:out value=" " />
 																							<ao:out value="${h5.label}" />
@@ -102,7 +102,7 @@ Arguments:
 																								<ol class="semanticcms-section-toc5ol">
 																									<c:forEach var="h6" items="${h5Sections}" varStatus="h6Status">
 																										<li class="semanticcms-section-toc5li">
-																											<ao:a href="#${fn:escapeXml(core:getRefIdInPage(page, h6.id))}">
+																											<ao:a href="#${ao:encodeFragment(core:getRefIdInPage(page, h6.id))}">
 																												<ao:out value="${h2Status.index+1}.${h3Status.index+1}.${h4Status.index+1}.${h5Status.index+1}.${h6Status.index+1}" />
 																												<ao:out value=" " />
 																												<ao:out value="${h6.label}" />
