@@ -1,6 +1,6 @@
 /*
  * semanticcms-section-renderer-html - Sections rendered as HTML in a Servlet environment.
- * Copyright (C) 2013, 2014, 2015, 2016, 2017, 2019  AO Industries, Inc.
+ * Copyright (C) 2013, 2014, 2015, 2016, 2017, 2019, 2020  AO Industries, Inc.
  *     support@aoindustries.com
  *     7262 Bull Pen Cir
  *     Mobile, AL 36695
@@ -24,7 +24,7 @@ package com.semanticcms.section.renderer.html;
 
 import com.aoindustries.encoding.MediaWriter;
 import static com.aoindustries.encoding.TextInXhtmlAttributeEncoder.textInXhtmlAttributeEncoder;
-import static com.aoindustries.encoding.TextInXhtmlEncoder.encodeTextInXhtml;
+import com.aoindustries.html.Html;
 import com.aoindustries.io.buffer.BufferResult;
 import com.semanticcms.core.model.ElementContext;
 import com.semanticcms.core.model.NodeBodyWriter;
@@ -35,7 +35,6 @@ import com.semanticcms.section.model.Nav;
 import com.semanticcms.section.model.Section;
 import com.semanticcms.section.model.SectioningContent;
 import java.io.IOException;
-import java.io.Writer;
 import java.util.Collections;
 import java.util.List;
 import javax.servlet.ServletException;
@@ -45,7 +44,7 @@ import javax.servlet.jsp.SkipPageException;
 final public class SectionHtmlRenderer {
 
 	public static void writeSectioningContent(
-		Writer out,
+		Html html,
 		ElementContext context,
 		SectioningContent sectioningContent,
 		String htmlElement,
@@ -59,7 +58,7 @@ final public class SectionHtmlRenderer {
 				try {
 					context.include(
 						"/semanticcms-section-renderer-html/toc.inc.jspx",
-						out,
+						html.out,
 						Collections.singletonMap("page", page)
 					);
 				} catch(IOException | ServletException | SkipPageException | RuntimeException e) {
@@ -79,65 +78,65 @@ final public class SectionHtmlRenderer {
 		// Highest tag is <h6>
 		if(sectioningLevel > 6) throw new IOException("Sectioning exceeded depth of h6 (including page as h1): sectioningLevel = " + sectioningLevel);
 
-		out.write('<');
-		out.write(htmlElement);
-		out.write("><h");
+		html.out.write('<');
+		html.out.write(htmlElement);
+		html.out.write("><h");
 		char sectioningLevelChar = (char)('0' + sectioningLevel);
-		out.write(sectioningLevelChar);
+		html.out.write(sectioningLevelChar);
 		String id = sectioningContent.getId();
 		if(id != null) {
-			out.write(" id=\"");
+			html.out.write(" id=\"");
 			PageIndex.appendIdInPage(
 				pageIndex,
 				sectioningContent.getPage(),
 				id,
-				new MediaWriter(textInXhtmlAttributeEncoder, out)
+				new MediaWriter(textInXhtmlAttributeEncoder, html.out)
 			);
-			out.write('"');
+			html.out.write('"');
 		}
-		out.write('>');
-		encodeTextInXhtml(sectioningContent.getLabel(), out);
-		out.write("</h");
-		out.write(sectioningLevelChar);
-		out.write('>');
+		html.out.write('>');
+		html.text(sectioningContent.getLabel());
+		html.out.write("</h");
+		html.out.write(sectioningLevelChar);
+		html.out.write('>');
 		BufferResult body = sectioningContent.getBody();
 		if(body.getLength() > 0) {
-			out.write("<div class=\"h");
-			out.write(sectioningLevelChar);
-			out.write("Content\">");
-			body.writeTo(new NodeBodyWriter(sectioningContent, out, context));
-			out.write("</div>");
+			html.out.write("<div class=\"h");
+			html.out.write(sectioningLevelChar);
+			html.out.write("Content\">");
+			body.writeTo(new NodeBodyWriter(sectioningContent, html.out, context));
+			html.out.write("</div>");
 		}
-		out.write("</");
-		out.write(htmlElement);
-		out.write('>');
+		html.out.write("</");
+		html.out.write(htmlElement);
+		html.out.write('>');
 	}
 
 	public static void writeAside(
-		Writer out,
+		Html html,
 		ElementContext context,
 		Aside aside,
 		PageIndex pageIndex
 	) throws IOException, ServletException, SkipPageException {
-		writeSectioningContent(out, context, aside, "aside", pageIndex);
+		writeSectioningContent(html, context, aside, "aside", pageIndex);
 	}
 
 	public static void writeNav(
-		Writer out,
+		Html html,
 		ElementContext context,
 		Nav nav,
 		PageIndex pageIndex
 	) throws IOException, ServletException, SkipPageException {
-		writeSectioningContent(out, context, nav, "nav", pageIndex);
+		writeSectioningContent(html, context, nav, "nav", pageIndex);
 	}
 
 	public static void writeSection(
-		Writer out,
+		Html html,
 		ElementContext context,
 		Section section,
 		PageIndex pageIndex
 	) throws IOException, ServletException, SkipPageException {
-		writeSectioningContent(out, context, section, "section", pageIndex);
+		writeSectioningContent(html, context, section, "section", pageIndex);
 	}
 
 	/**
