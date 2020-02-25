@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 semanticcms-section-renderer-html - Sections rendered as HTML in a Servlet environment.
-Copyright (C) 2013, 2014, 2015, 2016, 2017, 2019  AO Industries, Inc.
+Copyright (C) 2013, 2014, 2015, 2016, 2017, 2019, 2020  AO Industries, Inc.
 	support@aoindustries.com
 	7262 Bull Pen Cir
 	Mobile, AL 36695
@@ -36,7 +36,8 @@ Arguments:
 	xmlns:jsp="http://java.sun.com/JSP/Page"
 	version="2.1"
 >
-	<jsp:directive.page language="java" pageEncoding="UTF-8" session="false" />
+	<jsp:directive.page language="java" pageEncoding="UTF-8" />
+	<jsp:directive.page session="false" />
 	<c:set var="page" value="${arg.page}" />
 	<!-- Use explicit toc setting or determine auto mode.  In auto mode show when >= 3 total sections in page. -->
 	<c:if test="${
