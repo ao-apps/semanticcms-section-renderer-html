@@ -101,9 +101,9 @@ final public class SectionHtmlRenderer {
 		html.out.write('>');
 		BufferResult body = sectioningContent.getBody();
 		if(body.getLength() > 0) {
-			html.out.write("<div class=\"h");
+			html.out.write("<div class=\"semanticcms-section-h");
 			html.out.write(sectioningLevelChar);
-			html.out.write("Content\">");
+			html.out.write("-content\">");
 			body.writeTo(new NodeBodyWriter(sectioningContent, html.out, context));
 			html.out.write("</div>");
 		}
