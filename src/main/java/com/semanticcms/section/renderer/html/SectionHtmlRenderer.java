@@ -90,7 +90,7 @@ final public class SectionHtmlRenderer {
 				pageIndex,
 				sectioningContent.getPage(),
 				id,
-				new MediaWriter(textInXhtmlAttributeEncoder, html.out)
+				new MediaWriter(html.encodingContext, textInXhtmlAttributeEncoder, html.out)
 			);
 			html.out.write('"');
 		}
