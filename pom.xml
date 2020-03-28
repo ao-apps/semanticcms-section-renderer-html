@@ -52,6 +52,11 @@ along with semanticcms-section-renderer-html.  If not, see <http://www.gnu.org/l
 		<tag>HEAD</tag>
 	</scm>
 
+	<issueManagement>
+		<system>GitHub Issues</system>
+		<url>https://github.com/aoindustries/semanticcms-section-renderer-html/issues</url>
+	</issueManagement>
+
 	<profiles>
 		<profile>
 			<id>release</id>
