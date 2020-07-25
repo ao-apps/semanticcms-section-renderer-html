@@ -180,7 +180,7 @@ along with semanticcms-section-renderer-html.  If not, see <http://www.gnu.org/l
 			</dependency>
 			<!-- Runtime Direct -->
 			<dependency>
-				<groupId>com.aoindustries</groupId><artifactId>ao-taglib</artifactId><version>5.0.2${POST-SNAPSHOT}</version>
+				<groupId>com.aoindustries</groupId><artifactId>ao-taglib</artifactId><version>5.0.3-SNAPSHOT<!-- ${POST-SNAPSHOT} --></version>
 			</dependency>
 			<!-- javaee-web-api-bom: <groupId>javax.servlet</groupId><artifactId>jstl</artifactId> -->
 			<!-- javaee-web-api-bom: <groupId>org.glassfish.web</groupId><artifactId>jstl-impl</artifactId> -->
