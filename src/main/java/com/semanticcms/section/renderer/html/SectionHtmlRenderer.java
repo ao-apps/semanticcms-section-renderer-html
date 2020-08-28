@@ -80,9 +80,6 @@ final public class SectionHtmlRenderer {
 
 		html.out.write('<');
 		html.out.write(htmlElement);
-		html.out.write("><h");
-		char sectioningLevelChar = (char)('0' + sectioningLevel);
-		html.out.write(sectioningLevelChar);
 		String id = sectioningContent.getId();
 		if(id != null) {
 			html.out.write(" id=\"");
@@ -94,6 +91,9 @@ final public class SectionHtmlRenderer {
 			);
 			html.out.write('"');
 		}
+		html.out.write("><h");
+		char sectioningLevelChar = (char)('0' + sectioningLevel);
+		html.out.write(sectioningLevelChar);
 		html.out.write('>');
 		html.text(sectioningContent.getLabel());
 		html.out.write("</h");
