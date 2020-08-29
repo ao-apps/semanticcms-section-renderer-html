@@ -91,7 +91,7 @@ final public class SectionHtmlRenderer {
 			);
 			html.out.write('"');
 		}
-		html.out.write("><h");
+		html.out.write(" class=\"semanticcms-section\"><h");
 		char sectioningLevelChar = (char)('0' + sectioningLevel);
 		html.out.write(sectioningLevelChar);
 		html.out.write('>');
