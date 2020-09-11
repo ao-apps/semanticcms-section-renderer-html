@@ -43,6 +43,7 @@ import javax.servlet.jsp.SkipPageException;
 // TODO: Implement with https://www.w3.org/TR/wai-aria-1.1/#aria-label
 final public class SectionHtmlRenderer {
 
+	@SuppressWarnings({"UseSpecificCatch", "TooBroadCatch"})
 	public static void writeSectioningContent(
 		Html html,
 		ElementContext context,
@@ -61,10 +62,10 @@ final public class SectionHtmlRenderer {
 						html.out,
 						Collections.singletonMap("page", page)
 					);
-				} catch(IOException | ServletException | SkipPageException | RuntimeException e) {
+				} catch(Error | RuntimeException | IOException | ServletException | SkipPageException e) {
 					throw e;
-				} catch(Exception e) {
-					throw new ServletException(e);
+				} catch(Throwable t) {
+					throw new ServletException(t);
 				}
 			}
 		}
