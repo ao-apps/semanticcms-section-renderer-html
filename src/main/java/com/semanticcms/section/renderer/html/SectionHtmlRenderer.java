@@ -86,7 +86,7 @@ final public class SectionHtmlRenderer {
 			html.out.write(" id=\"");
 			PageIndex.appendIdInPage(
 				pageIndex,
-				sectioningContent.getPage(),
+				page,
 				id,
 				new MediaWriter(html.encodingContext, textInXhtmlAttributeEncoder, html.out)
 			);
