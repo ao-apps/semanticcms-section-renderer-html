@@ -36,37 +36,59 @@ import com.semanticcms.section.model.Section;
 import com.semanticcms.section.model.SectioningContent;
 import java.io.IOException;
 import java.util.Collections;
-import java.util.List;
+import java.util.IdentityHashMap;
+import java.util.Map;
 import javax.servlet.ServletException;
+import javax.servlet.ServletRequest;
 import javax.servlet.jsp.SkipPageException;
 
 // TODO: Implement with https://www.w3.org/TR/wai-aria-1.1/#aria-label
 final public class SectionHtmlRenderer {
 
-	@SuppressWarnings({"UseSpecificCatch", "TooBroadCatch"})
+	private static final String TOC_DONE_PER_PAGE_REQUEST_ATTRIBUTE = SectionHtmlRenderer.class.getName() + ".tocDonePerPage";
+
+	/**
+	 * Writes the table of contents, if needed and not yet written on the page.
+	 * The determination of whether needed on the page is only performed once per page, with the result cached in a
+	 * request attribute.
+	 */
+	public static void writeToc(
+		ServletRequest request,
+		Html html,
+		ElementContext context,
+		Page page
+	) throws Exception {
+		@SuppressWarnings("unchecked")
+		Map<Page,Boolean> tocDonePerPage = (Map<Page,Boolean>)request.getAttribute(TOC_DONE_PER_PAGE_REQUEST_ATTRIBUTE);
+		if(tocDonePerPage == null) {
+			tocDonePerPage = new IdentityHashMap<>();
+			request.setAttribute(TOC_DONE_PER_PAGE_REQUEST_ATTRIBUTE, tocDonePerPage);
+		}
+		if(tocDonePerPage.putIfAbsent(page, true) == null) {
+			context.include(
+				"/semanticcms-section-renderer-html/toc.inc.jspx",
+				html.out,
+				Collections.singletonMap("page", page)
+			);
+		}
+	}
+
 	public static void writeSectioningContent(
+		ServletRequest request,
 		Html html,
 		ElementContext context,
 		SectioningContent sectioningContent,
 		String htmlElement,
 		PageIndex pageIndex
 	) throws IOException, ServletException, SkipPageException {
-		// If this is the first sectioning content in the page, write the table of contents
 		Page page = sectioningContent.getPage();
 		if(page != null) {
-			List<SectioningContent> topLevelSectioningContents = page.findTopLevelElements(SectioningContent.class);
-			if(!topLevelSectioningContents.isEmpty() && topLevelSectioningContents.get(0) == sectioningContent) {
-				try {
-					context.include(
-						"/semanticcms-section-renderer-html/toc.inc.jspx",
-						html.out,
-						Collections.singletonMap("page", page)
-					);
-				} catch(Error | RuntimeException | IOException | ServletException | SkipPageException e) {
-					throw e;
-				} catch(Throwable t) {
-					throw new ServletException(t);
-				}
+			try {
+				writeToc(request, html, context, page);
+			} catch(Error | RuntimeException | IOException | ServletException | SkipPageException e) {
+				throw e;
+			} catch(Exception e) {
+				throw new ServletException(e);
 			}
 		}
 		// Count the sectioning level by finding all sectioning contents in the parent elements
@@ -114,30 +136,33 @@ final public class SectionHtmlRenderer {
 	}
 
 	public static void writeAside(
+		ServletRequest request,
 		Html html,
 		ElementContext context,
 		Aside aside,
 		PageIndex pageIndex
 	) throws IOException, ServletException, SkipPageException {
-		writeSectioningContent(html, context, aside, "aside", pageIndex);
+		writeSectioningContent(request, html, context, aside, "aside", pageIndex);
 	}
 
 	public static void writeNav(
+		ServletRequest request,
 		Html html,
 		ElementContext context,
 		Nav nav,
 		PageIndex pageIndex
 	) throws IOException, ServletException, SkipPageException {
-		writeSectioningContent(html, context, nav, "nav", pageIndex);
+		writeSectioningContent(request, html, context, nav, "nav", pageIndex);
 	}
 
 	public static void writeSection(
+		ServletRequest request,
 		Html html,
 		ElementContext context,
 		Section section,
 		PageIndex pageIndex
 	) throws IOException, ServletException, SkipPageException {
-		writeSectioningContent(html, context, section, "section", pageIndex);
+		writeSectioningContent(request, html, context, section, "section", pageIndex);
 	}
 
 	/**
