@@ -111,18 +111,18 @@ along with semanticcms-section-renderer-html.  If not, see <http://www.gnu.org/l
 									<artifactItems>
 										<!-- Direct -->
 										<artifactItem>
-											<groupId>com.aoindustries</groupId><artifactId>ao-encoding</artifactId>
-											<classifier>javadoc</classifier><includes>element-list, package-list</includes>
+											<groupId>com.aoindustries</groupId><artifactId>ao-encoding</artifactId><classifier>javadoc</classifier>
+											<includes>element-list, package-list</includes>
 											<outputDirectory>${project.build.directory}/offlineLinks/com.aoindustries/ao-encoding</outputDirectory>
 										</artifactItem>
 										<artifactItem>
-											<groupId>com.aoindustries</groupId><artifactId>ao-fluent-html</artifactId>
-											<classifier>javadoc</classifier><includes>element-list, package-list</includes>
+											<groupId>com.aoindustries</groupId><artifactId>ao-fluent-html</artifactId><classifier>javadoc</classifier>
+											<includes>element-list, package-list</includes>
 											<outputDirectory>${project.build.directory}/offlineLinks/com.aoindustries/ao-fluent-html</outputDirectory>
 										</artifactItem>
 										<artifactItem>
-											<groupId>com.aoindustries</groupId><artifactId>ao-io-buffer</artifactId>
-											<classifier>javadoc</classifier><includes>element-list, package-list</includes>
+											<groupId>com.aoindustries</groupId><artifactId>ao-io-buffer</artifactId><classifier>javadoc</classifier>
+											<includes>element-list, package-list</includes>
 											<outputDirectory>${project.build.directory}/offlineLinks/com.aoindustries/ao-io-buffer</outputDirectory>
 										</artifactItem>
 										<!-- JSP Only: <groupId>com.aoindustries</groupId><artifactId>ao-taglib</artifactId> -->
@@ -130,19 +130,19 @@ along with semanticcms-section-renderer-html.  If not, see <http://www.gnu.org/l
 										<!-- ao-javadoc-offline: <groupId>javax.servlet.jsp</groupId><artifactId>javax.servlet.jsp-api</artifactId> -->
 										<!-- JSP Only: <groupId>javax.servlet</groupId><artifactId>jstl</artifactId> -->
 										<artifactItem>
-											<groupId>com.semanticcms</groupId><artifactId>semanticcms-core-model</artifactId>
-											<classifier>javadoc</classifier><includes>element-list, package-list</includes>
+											<groupId>com.semanticcms</groupId><artifactId>semanticcms-core-model</artifactId><classifier>javadoc</classifier>
+											<includes>element-list, package-list</includes>
 											<outputDirectory>${project.build.directory}/offlineLinks/com.semanticcms/semanticcms-core-model</outputDirectory>
 										</artifactItem>
 										<artifactItem>
-											<groupId>com.semanticcms</groupId><artifactId>semanticcms-core-renderer-html</artifactId>
-											<classifier>javadoc</classifier><includes>element-list, package-list</includes>
+											<groupId>com.semanticcms</groupId><artifactId>semanticcms-core-renderer-html</artifactId><classifier>javadoc</classifier>
+											<includes>element-list, package-list</includes>
 											<outputDirectory>${project.build.directory}/offlineLinks/com.semanticcms/semanticcms-core-renderer-html</outputDirectory>
 										</artifactItem>
 										<!-- JSP Only: <groupId>com.semanticcms</groupId><artifactId>semanticcms-core-taglib</artifactId> -->
 										<artifactItem>
-											<groupId>com.semanticcms</groupId><artifactId>semanticcms-section-model</artifactId>
-											<classifier>javadoc</classifier><includes>element-list, package-list</includes>
+											<groupId>com.semanticcms</groupId><artifactId>semanticcms-section-model</artifactId><classifier>javadoc</classifier>
+											<includes>element-list, package-list</includes>
 											<outputDirectory>${project.build.directory}/offlineLinks/com.semanticcms/semanticcms-section-model</outputDirectory>
 										</artifactItem>
 									</artifactItems>
