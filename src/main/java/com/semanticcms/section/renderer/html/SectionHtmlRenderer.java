@@ -1,6 +1,6 @@
 /*
  * semanticcms-section-renderer-html - Sections rendered as HTML in a Servlet environment.
- * Copyright (C) 2013, 2014, 2015, 2016, 2017, 2019, 2020  AO Industries, Inc.
+ * Copyright (C) 2013, 2014, 2015, 2016, 2017, 2019, 2020, 2021  AO Industries, Inc.
  *     support@aoindustries.com
  *     7262 Bull Pen Cir
  *     Mobile, AL 36695
@@ -24,7 +24,7 @@ package com.semanticcms.section.renderer.html;
 
 import com.aoindustries.encoding.MediaWriter;
 import static com.aoindustries.encoding.TextInXhtmlAttributeEncoder.textInXhtmlAttributeEncoder;
-import com.aoindustries.html.Html;
+import com.aoindustries.html.Document;
 import com.aoindustries.io.buffer.BufferResult;
 import com.semanticcms.core.model.ElementContext;
 import com.semanticcms.core.model.NodeBodyWriter;
@@ -54,7 +54,7 @@ final public class SectionHtmlRenderer {
 	 */
 	public static void writeToc(
 		ServletRequest request,
-		Html html,
+		Document document,
 		ElementContext context,
 		Page page
 	) throws Exception {
@@ -67,7 +67,7 @@ final public class SectionHtmlRenderer {
 		if(tocDonePerPage.putIfAbsent(page, true) == null) {
 			context.include(
 				"/semanticcms-section-renderer-html/toc.inc.jspx",
-				html.out,
+				document.out,
 				Collections.singletonMap("page", page)
 			);
 		}
@@ -75,7 +75,7 @@ final public class SectionHtmlRenderer {
 
 	public static void writeSectioningContent(
 		ServletRequest request,
-		Html html,
+		Document document,
 		ElementContext context,
 		SectioningContent sectioningContent,
 		String htmlElement,
@@ -84,7 +84,7 @@ final public class SectionHtmlRenderer {
 		Page page = sectioningContent.getPage();
 		if(page != null) {
 			try {
-				writeToc(request, html, context, page);
+				writeToc(request, document, context, page);
 			} catch(Error | RuntimeException | IOException | ServletException | SkipPageException e) {
 				throw e;
 			} catch(Exception e) {
@@ -101,68 +101,68 @@ final public class SectionHtmlRenderer {
 		// Highest tag is <h6>
 		if(sectioningLevel > 6) throw new IOException("Sectioning exceeded depth of h6 (including page as h1): sectioningLevel = " + sectioningLevel);
 
-		html.out.write('<');
-		html.out.write(htmlElement);
+		document.out.write('<');
+		document.out.write(htmlElement);
 		String id = sectioningContent.getId();
 		if(id != null) {
-			html.out.write(" id=\"");
+			document.out.write(" id=\"");
 			PageIndex.appendIdInPage(
 				pageIndex,
 				page,
 				id,
-				new MediaWriter(html.encodingContext, textInXhtmlAttributeEncoder, html.out)
+				new MediaWriter(document.encodingContext, textInXhtmlAttributeEncoder, document.out)
 			);
-			html.out.write('"');
+			document.out.write('"');
 		}
-		html.out.write(" class=\"semanticcms-section\"><h");
+		document.out.write(" class=\"semanticcms-section\"><h");
 		char sectioningLevelChar = (char)('0' + sectioningLevel);
-		html.out.write(sectioningLevelChar);
-		html.out.write('>');
-		html.text(sectioningContent.getLabel());
-		html.out.write("</h");
-		html.out.write(sectioningLevelChar);
-		html.out.write('>');
+		document.out.write(sectioningLevelChar);
+		document.out.write('>');
+		document.text(sectioningContent.getLabel());
+		document.out.write("</h");
+		document.out.write(sectioningLevelChar);
+		document.out.write('>');
 		BufferResult body = sectioningContent.getBody();
 		if(body.getLength() > 0) {
-			html.out.write("<div class=\"semanticcms-section-h");
-			html.out.write(sectioningLevelChar);
-			html.out.write("-content\">");
-			body.writeTo(new NodeBodyWriter(sectioningContent, html.out, context));
-			html.out.write("</div>");
+			document.out.write("<div class=\"semanticcms-section-h");
+			document.out.write(sectioningLevelChar);
+			document.out.write("-content\">");
+			body.writeTo(new NodeBodyWriter(sectioningContent, document.out, context));
+			document.out.write("</div>");
 		}
-		html.out.write("</");
-		html.out.write(htmlElement);
-		html.out.write('>');
+		document.out.write("</");
+		document.out.write(htmlElement);
+		document.out.write('>');
 	}
 
 	public static void writeAside(
 		ServletRequest request,
-		Html html,
+		Document document,
 		ElementContext context,
 		Aside aside,
 		PageIndex pageIndex
 	) throws IOException, ServletException, SkipPageException {
-		writeSectioningContent(request, html, context, aside, "aside", pageIndex);
+		writeSectioningContent(request, document, context, aside, "aside", pageIndex);
 	}
 
 	public static void writeNav(
 		ServletRequest request,
-		Html html,
+		Document document,
 		ElementContext context,
 		Nav nav,
 		PageIndex pageIndex
 	) throws IOException, ServletException, SkipPageException {
-		writeSectioningContent(request, html, context, nav, "nav", pageIndex);
+		writeSectioningContent(request, document, context, nav, "nav", pageIndex);
 	}
 
 	public static void writeSection(
 		ServletRequest request,
-		Html html,
+		Document document,
 		ElementContext context,
 		Section section,
 		PageIndex pageIndex
 	) throws IOException, ServletException, SkipPageException {
-		writeSectioningContent(request, html, context, section, "section", pageIndex);
+		writeSectioningContent(request, document, context, section, "section", pageIndex);
 	}
 
 	/**
