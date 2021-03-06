@@ -22,10 +22,13 @@
  */
 package com.semanticcms.section.renderer.html;
 
-import com.aoindustries.encoding.MediaWriter;
-import static com.aoindustries.encoding.TextInXhtmlAttributeEncoder.textInXhtmlAttributeEncoder;
-import com.aoindustries.html.Document;
+import com.aoindustries.html.FlowContent;
+import com.aoindustries.html.HeadingContent;
+import com.aoindustries.html.NAV_factory;
+import com.aoindustries.html.NormalText;
+import com.aoindustries.html.PalpableContent;
 import com.aoindustries.io.buffer.BufferResult;
+import com.aoindustries.io.function.IOFunction;
 import com.semanticcms.core.model.ElementContext;
 import com.semanticcms.core.model.NodeBodyWriter;
 import com.semanticcms.core.model.Page;
@@ -52,9 +55,9 @@ final public class SectionHtmlRenderer {
 	 * The determination of whether needed on the page is only performed once per page, with the result cached in a
 	 * request attribute.
 	 */
-	public static void writeToc(
+	public static <__ extends com.aoindustries.html.SectioningContent<__>> void writeToc(
 		ServletRequest request,
-		Document document,
+		__ content,
 		ElementContext context,
 		Page page
 	) throws Exception {
@@ -67,24 +70,27 @@ final public class SectionHtmlRenderer {
 		if(tocDonePerPage.putIfAbsent(page, true) == null) {
 			context.include(
 				"/semanticcms-section-renderer-html/toc.inc.jspx",
-				document.out,
+				content.getDocument().out,
 				Collections.singletonMap("page", page)
 			);
 		}
 	}
 
-	public static void writeSectioningContent(
+	/**
+	 * @param <__>  {@link PalpableContent} has both {@link HeadingContent} and {@link com.aoindustries.html.SectioningContent}
+	 */
+	public static <__ extends PalpableContent<__>> void writeSectioningContent(
 		ServletRequest request,
-		Document document,
+		__ content,
 		ElementContext context,
 		SectioningContent sectioningContent,
-		String htmlElement,
+		IOFunction<com.aoindustries.html.SectioningContent<?>, NormalText<?, ?, ? extends FlowContent<?>, ?>> htmlElement,
 		PageIndex pageIndex
 	) throws IOException, ServletException, SkipPageException {
 		Page page = sectioningContent.getPage();
 		if(page != null) {
 			try {
-				writeToc(request, document, context, page);
+				writeToc(request, content, context, page);
 			} catch(Error | RuntimeException | IOException | ServletException | SkipPageException e) {
 				throw e;
 			} catch(Exception e) {
@@ -92,77 +98,66 @@ final public class SectionHtmlRenderer {
 			}
 		}
 		// Count the sectioning level by finding all sectioning contents in the parent elements
-		int sectioningLevel = 2; // <h1> is reserved for page titles
-		com.semanticcms.core.model.Element parentElement = sectioningContent.getParentElement();
-		while(parentElement != null) {
-			if(parentElement instanceof SectioningContent) sectioningLevel++;
-			parentElement = parentElement.getParentElement();
+		int sectioningLevel; {
+			int sectioningLevel_ = 2; // <h1> is reserved for page titles
+			com.semanticcms.core.model.Element parentElement = sectioningContent.getParentElement();
+			while(parentElement != null) {
+				if(parentElement instanceof SectioningContent) sectioningLevel_++;
+				parentElement = parentElement.getParentElement();
+			}
+			// Highest tag is <h6>
+			if(sectioningLevel_ > 6) throw new IOException("Sectioning exceeded depth of h6 (including page as h1): sectioningLevel = " + sectioningLevel_);
+			sectioningLevel = sectioningLevel_;
 		}
-		// Highest tag is <h6>
-		if(sectioningLevel > 6) throw new IOException("Sectioning exceeded depth of h6 (including page as h1): sectioningLevel = " + sectioningLevel);
 
-		document.out.write('<');
-		document.out.write(htmlElement);
 		String id = sectioningContent.getId();
-		if(id != null) {
-			document.out.write(" id=\"");
-			PageIndex.appendIdInPage(
+		htmlElement.apply(content)
+			.id((id == null) ? null : idAttr -> PageIndex.appendIdInPage(
 				pageIndex,
 				page,
 				id,
-				new MediaWriter(document.encodingContext, textInXhtmlAttributeEncoder, document.out)
-			);
-			document.out.write('"');
-		}
-		document.out.write(" class=\"semanticcms-section\"><h");
-		char sectioningLevelChar = (char)('0' + sectioningLevel);
-		document.out.write(sectioningLevelChar);
-		document.out.write('>');
-		document.text(sectioningContent.getLabel());
-		document.out.write("</h");
-		document.out.write(sectioningLevelChar);
-		document.out.write('>');
-		BufferResult body = sectioningContent.getBody();
-		if(body.getLength() > 0) {
-			document.out.write("<div class=\"semanticcms-section-h");
-			document.out.write(sectioningLevelChar);
-			document.out.write("-content\">");
-			body.writeTo(new NodeBodyWriter(sectioningContent, document.out, context));
-			document.out.write("</div>");
-		}
-		document.out.write("</");
-		document.out.write(htmlElement);
-		document.out.write('>');
+				idAttr
+			))
+			.clazz("semanticcms-section")
+		.__(section -> {
+			section.h__(sectioningLevel, sectioningContent);
+			BufferResult body = sectioningContent.getBody();
+			if(body.getLength() > 0) {
+				section.div().clazz(clazz -> clazz.append("semanticcms-section-h").append((char)('0' + sectioningLevel)).append("-content")).__(div ->
+					body.writeTo(new NodeBodyWriter(sectioningContent, div.getDocument().out, context))
+				);
+			}
+		});
 	}
 
-	public static void writeAside(
+	public static <__ extends PalpableContent<__>> void writeAside(
 		ServletRequest request,
-		Document document,
+		__ content,
 		ElementContext context,
 		Aside aside,
 		PageIndex pageIndex
 	) throws IOException, ServletException, SkipPageException {
-		writeSectioningContent(request, document, context, aside, "aside", pageIndex);
+		writeSectioningContent(request, content, context, aside, sectioningContent -> sectioningContent.aside(), pageIndex);
 	}
 
-	public static void writeNav(
+	public static <__ extends PalpableContent<__>> void writeNav(
 		ServletRequest request,
-		Document document,
+		__ content,
 		ElementContext context,
 		Nav nav,
 		PageIndex pageIndex
 	) throws IOException, ServletException, SkipPageException {
-		writeSectioningContent(request, document, context, nav, "nav", pageIndex);
+		writeSectioningContent(request, content, context, nav, sectioningContent -> sectioningContent.nav(), pageIndex);
 	}
 
-	public static void writeSection(
+	public static <__ extends PalpableContent<__>> void writeSection(
 		ServletRequest request,
-		Document document,
+		__ content,
 		ElementContext context,
 		Section section,
 		PageIndex pageIndex
 	) throws IOException, ServletException, SkipPageException {
-		writeSectioningContent(request, document, context, section, "section", pageIndex);
+		writeSectioningContent(request, content, context, section, sectioningContent -> sectioningContent.section(), pageIndex);
 	}
 
 	/**
