@@ -22,6 +22,7 @@
  */
 package com.semanticcms.section.renderer.html;
 
+import com.aoindustries.html.AnyDocument;
 import com.aoindustries.html.FlowContent;
 import com.aoindustries.html.HeadingContent;
 import com.aoindustries.html.NAV_factory;
@@ -55,14 +56,17 @@ final public class SectionHtmlRenderer {
 	 * The determination of whether needed on the page is only performed once per page, with the result cached in a
 	 * request attribute.
 	 */
-	public static <__ extends com.aoindustries.html.SectioningContent<__>> void writeToc(
+	public static <
+		D extends AnyDocument<D>,
+		__ extends com.aoindustries.html.SectioningContent<D, __>
+	> void writeToc(
 		ServletRequest request,
 		__ content,
 		ElementContext context,
 		Page page
 	) throws Exception {
 		@SuppressWarnings("unchecked")
-		Map<Page,Boolean> tocDonePerPage = (Map<Page,Boolean>)request.getAttribute(TOC_DONE_PER_PAGE_REQUEST_ATTRIBUTE);
+		Map<Page, Boolean> tocDonePerPage = (Map<Page, Boolean>)request.getAttribute(TOC_DONE_PER_PAGE_REQUEST_ATTRIBUTE);
 		if(tocDonePerPage == null) {
 			tocDonePerPage = new IdentityHashMap<>();
 			request.setAttribute(TOC_DONE_PER_PAGE_REQUEST_ATTRIBUTE, tocDonePerPage);
@@ -77,14 +81,17 @@ final public class SectionHtmlRenderer {
 	}
 
 	/**
-	 * @param <__>  {@link PalpableContent} has both {@link HeadingContent} and {@link com.aoindustries.html.SectioningContent}
+	 * @param  <__>  {@link PalpableContent} has both {@link HeadingContent} and {@link com.aoindustries.html.SectioningContent}
 	 */
-	public static <__ extends PalpableContent<__>> void writeSectioningContent(
+	public static <
+		D extends AnyDocument<D>,
+		__ extends PalpableContent<D, __>
+	> void writeSectioningContent(
 		ServletRequest request,
 		__ content,
 		ElementContext context,
 		SectioningContent sectioningContent,
-		IOFunction<com.aoindustries.html.SectioningContent<?>, NormalText<?, ?, ? extends FlowContent<?>, ?>> htmlElement,
+		IOFunction<com.aoindustries.html.SectioningContent<D, ?>, NormalText<D, ?, ?, ? extends FlowContent<D, ?>, ?>> htmlElement,
 		PageIndex pageIndex
 	) throws IOException, ServletException, SkipPageException {
 		Page page = sectioningContent.getPage();
@@ -130,7 +137,10 @@ final public class SectionHtmlRenderer {
 		});
 	}
 
-	public static <__ extends PalpableContent<__>> void writeAside(
+	public static <
+		D extends AnyDocument<D>,
+		__ extends PalpableContent<D, __>
+	> void writeAside(
 		ServletRequest request,
 		__ content,
 		ElementContext context,
@@ -140,7 +150,10 @@ final public class SectionHtmlRenderer {
 		writeSectioningContent(request, content, context, aside, sectioningContent -> sectioningContent.aside(), pageIndex);
 	}
 
-	public static <__ extends PalpableContent<__>> void writeNav(
+	public static <
+		D extends AnyDocument<D>,
+		__ extends PalpableContent<D, __>
+	> void writeNav(
 		ServletRequest request,
 		__ content,
 		ElementContext context,
@@ -150,7 +163,10 @@ final public class SectionHtmlRenderer {
 		writeSectioningContent(request, content, context, nav, sectioningContent -> sectioningContent.nav(), pageIndex);
 	}
 
-	public static <__ extends PalpableContent<__>> void writeSection(
+	public static <
+		D extends AnyDocument<D>,
+		__ extends PalpableContent<D, __>
+	> void writeSection(
 		ServletRequest request,
 		__ content,
 		ElementContext context,
