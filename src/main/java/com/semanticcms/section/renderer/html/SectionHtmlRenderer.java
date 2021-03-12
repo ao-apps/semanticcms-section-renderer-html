@@ -25,7 +25,6 @@ package com.semanticcms.section.renderer.html;
 import com.aoindustries.html.AnyDocument;
 import com.aoindustries.html.FlowContent;
 import com.aoindustries.html.HeadingContent;
-import com.aoindustries.html.NAV_factory;
 import com.aoindustries.html.NormalText;
 import com.aoindustries.html.PalpableContent;
 import com.aoindustries.io.buffer.BufferResult;
@@ -74,7 +73,7 @@ final public class SectionHtmlRenderer {
 		if(tocDonePerPage.putIfAbsent(page, true) == null) {
 			context.include(
 				"/semanticcms-section-renderer-html/toc.inc.jspx",
-				content.getDocument().out,
+				content.getDocument().getUnsafe(),
 				Collections.singletonMap("page", page)
 			);
 		}
@@ -131,7 +130,7 @@ final public class SectionHtmlRenderer {
 			BufferResult body = sectioningContent.getBody();
 			if(body.getLength() > 0) {
 				section.div().clazz(clazz -> clazz.append("semanticcms-section-h").append((char)('0' + sectioningLevel)).append("-content")).__(div ->
-					body.writeTo(new NodeBodyWriter(sectioningContent, div.getDocument().out, context))
+					body.writeTo(new NodeBodyWriter(sectioningContent, div.getDocument().getUnsafe(), context))
 				);
 			}
 		});
