@@ -22,11 +22,12 @@
  */
 package com.semanticcms.section.renderer.html;
 
-import com.aoindustries.html.AnyDocument;
-import com.aoindustries.html.FlowContent;
-import com.aoindustries.html.HeadingContent;
-import com.aoindustries.html.NormalText;
-import com.aoindustries.html.PalpableContent;
+import com.aoindustries.html.any.AnyDocument;
+import com.aoindustries.html.any.AnyFlowContent;
+import com.aoindustries.html.any.AnyHeadingContent;
+import com.aoindustries.html.any.AnyPalpableContent;
+import com.aoindustries.html.any.AnySectioningContent;
+import com.aoindustries.html.any.NormalText;
 import com.aoindustries.io.buffer.BufferResult;
 import com.aoindustries.io.function.IOFunction;
 import com.semanticcms.core.model.ElementContext;
@@ -57,7 +58,7 @@ final public class SectionHtmlRenderer {
 	 */
 	public static <
 		D extends AnyDocument<D>,
-		__ extends com.aoindustries.html.SectioningContent<D, __>
+		__ extends AnySectioningContent<D, __>
 	> void writeToc(
 		ServletRequest request,
 		__ content,
@@ -80,17 +81,17 @@ final public class SectionHtmlRenderer {
 	}
 
 	/**
-	 * @param  <__>  {@link PalpableContent} has both {@link HeadingContent} and {@link com.aoindustries.html.SectioningContent}
+	 * @param  <__>  {@link AnyPalpableContent} has both {@link AnyHeadingContent} and {@link AnySectioningContent}
 	 */
 	public static <
 		D extends AnyDocument<D>,
-		__ extends PalpableContent<D, __>
+		__ extends AnyPalpableContent<D, __>
 	> void writeSectioningContent(
 		ServletRequest request,
 		__ content,
 		ElementContext context,
 		SectioningContent sectioningContent,
-		IOFunction<com.aoindustries.html.SectioningContent<D, ?>, NormalText<D, ?, ?, ? extends FlowContent<D, ?>, ?>> htmlElement,
+		IOFunction<AnySectioningContent<D, ?>, NormalText<D, ?, ?, ? extends AnyFlowContent<D, ?>, ?>> htmlElement,
 		PageIndex pageIndex
 	) throws IOException, ServletException, SkipPageException {
 		Page page = sectioningContent.getPage();
@@ -138,7 +139,7 @@ final public class SectionHtmlRenderer {
 
 	public static <
 		D extends AnyDocument<D>,
-		__ extends PalpableContent<D, __>
+		__ extends AnyPalpableContent<D, __>
 	> void writeAside(
 		ServletRequest request,
 		__ content,
@@ -151,7 +152,7 @@ final public class SectionHtmlRenderer {
 
 	public static <
 		D extends AnyDocument<D>,
-		__ extends PalpableContent<D, __>
+		__ extends AnyPalpableContent<D, __>
 	> void writeNav(
 		ServletRequest request,
 		__ content,
@@ -164,7 +165,7 @@ final public class SectionHtmlRenderer {
 
 	public static <
 		D extends AnyDocument<D>,
-		__ extends PalpableContent<D, __>
+		__ extends AnyPalpableContent<D, __>
 	> void writeSection(
 		ServletRequest request,
 		__ content,
