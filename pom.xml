@@ -116,9 +116,9 @@ along with semanticcms-section-renderer-html.  If not, see <http://www.gnu.org/l
 											<outputDirectory>${project.build.directory}/offlineLinks/com.aoindustries/ao-encoding</outputDirectory>
 										</artifactItem>
 										<artifactItem>
-											<groupId>com.aoindustries</groupId><artifactId>ao-fluent-html</artifactId><classifier>javadoc</classifier>
+											<groupId>com.aoindustries</groupId><artifactId>ao-fluent-html-any</artifactId><classifier>javadoc</classifier>
 											<includes>element-list, package-list</includes>
-											<outputDirectory>${project.build.directory}/offlineLinks/com.aoindustries/ao-fluent-html</outputDirectory>
+											<outputDirectory>${project.build.directory}/offlineLinks/com.aoindustries/ao-fluent-html-any</outputDirectory>
 										</artifactItem>
 										<artifactItem>
 											<groupId>com.aoindustries</groupId><artifactId>ao-io-buffer</artifactId><classifier>javadoc</classifier>
@@ -165,8 +165,8 @@ along with semanticcms-section-renderer-html.  If not, see <http://www.gnu.org/l
 									<location>${project.build.directory}/offlineLinks/com.aoindustries/ao-encoding</location>
 								</offlineLink>
 								<offlineLink>
-									<url>https://aoindustries.com/ao-fluent-html/apidocs/</url>
-									<location>${project.build.directory}/offlineLinks/com.aoindustries/ao-fluent-html</location>
+									<url>https://aoindustries.com/ao-fluent-html/any/apidocs/</url>
+									<location>${project.build.directory}/offlineLinks/com.aoindustries/ao-fluent-html-any</location>
 								</offlineLink>
 								<offlineLink>
 									<url>https://aoindustries.com/ao-io-buffer/apidocs/</url>
@@ -218,7 +218,7 @@ along with semanticcms-section-renderer-html.  If not, see <http://www.gnu.org/l
 				<groupId>com.aoindustries</groupId><artifactId>ao-encoding</artifactId><version>4.0.0${POST-SNAPSHOT}</version>
 			</dependency>
 			<dependency>
-				<groupId>com.aoindustries</groupId><artifactId>ao-fluent-html</artifactId><version>0.4.0-SNAPSHOT<!-- ${POST-SNAPSHOT} --></version>
+				<groupId>com.aoindustries</groupId><artifactId>ao-fluent-html-any</artifactId><version>0.4.0-SNAPSHOT<!-- ${POST-SNAPSHOT} --></version>
 			</dependency>
 			<dependency>
 				<groupId>com.aoindustries</groupId><artifactId>ao-io-buffer</artifactId><version>3.3.0${POST-SNAPSHOT}</version>
@@ -258,7 +258,7 @@ along with semanticcms-section-renderer-html.  If not, see <http://www.gnu.org/l
 				<groupId>com.aoindustries</groupId><artifactId>ao-encoding-taglib</artifactId><version>1.0.2${POST-SNAPSHOT}</version>
 			</dependency>
 			<dependency>
-				<groupId>com.aoindustries</groupId><artifactId>ao-fluent-html-servlet</artifactId><version>0.2.0-SNAPSHOT<!-- ${POST-SNAPSHOT} --></version>
+				<groupId>com.aoindustries</groupId><artifactId>ao-fluent-html-servlet</artifactId><version>0.4.0-SNAPSHOT<!-- ${POST-SNAPSHOT} --></version>
 			</dependency>
 			<dependency>
 				<groupId>com.aoindustries</groupId><artifactId>ao-net-types</artifactId><version>1.3.0${POST-SNAPSHOT}</version>
@@ -337,7 +337,7 @@ along with semanticcms-section-renderer-html.  If not, see <http://www.gnu.org/l
 			<groupId>com.aoindustries</groupId><artifactId>ao-encoding</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>com.aoindustries</groupId><artifactId>ao-fluent-html</artifactId>
+			<groupId>com.aoindustries</groupId><artifactId>ao-fluent-html-any</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>com.aoindustries</groupId><artifactId>ao-io-buffer</artifactId>
