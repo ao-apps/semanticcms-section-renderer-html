@@ -22,7 +22,6 @@
  */
 package com.semanticcms.section.renderer.html;
 
-import com.aoindustries.html.any.AnyDocument;
 import com.aoindustries.html.any.AnyFlowContent;
 import com.aoindustries.html.any.AnyHeadingContent;
 import com.aoindustries.html.any.AnyPalpableContent;
@@ -56,12 +55,9 @@ final public class SectionHtmlRenderer {
 	 * The determination of whether needed on the page is only performed once per page, with the result cached in a
 	 * request attribute.
 	 */
-	public static <
-		D extends AnyDocument<D>,
-		__ extends AnySectioningContent<D, __>
-	> void writeToc(
+	public static void writeToc(
 		ServletRequest request,
-		__ content,
+		AnySectioningContent<?, ?> content,
 		ElementContext context,
 		Page page
 	) throws Exception {
@@ -81,17 +77,14 @@ final public class SectionHtmlRenderer {
 	}
 
 	/**
-	 * @param  <__>  {@link AnyPalpableContent} has both {@link AnyHeadingContent} and {@link AnySectioningContent}
+	 * @param  content  {@link AnyPalpableContent} has both {@link AnyHeadingContent} and {@link AnySectioningContent}
 	 */
-	public static <
-		D extends AnyDocument<D>,
-		__ extends AnyPalpableContent<D, __>
-	> void writeSectioningContent(
+	public static void writeSectioningContent(
 		ServletRequest request,
-		__ content,
+		AnyPalpableContent<?, ?> content,
 		ElementContext context,
 		SectioningContent sectioningContent,
-		IOFunction<AnySectioningContent<D, ?>, NormalText<D, ?, ?, ? extends AnyFlowContent<D, ?>, ?>> htmlElement,
+		IOFunction<AnySectioningContent<?, ?>, NormalText<?, ?, ?, ? extends AnyFlowContent<?, ?>, ?>> htmlElement,
 		PageIndex pageIndex
 	) throws IOException, ServletException, SkipPageException {
 		Page page = sectioningContent.getPage();
@@ -137,12 +130,9 @@ final public class SectionHtmlRenderer {
 		});
 	}
 
-	public static <
-		D extends AnyDocument<D>,
-		__ extends AnyPalpableContent<D, __>
-	> void writeAside(
+	public static void writeAside(
 		ServletRequest request,
-		__ content,
+		AnyPalpableContent<?, ?> content,
 		ElementContext context,
 		Aside aside,
 		PageIndex pageIndex
@@ -150,12 +140,9 @@ final public class SectionHtmlRenderer {
 		writeSectioningContent(request, content, context, aside, sectioningContent -> sectioningContent.aside(), pageIndex);
 	}
 
-	public static <
-		D extends AnyDocument<D>,
-		__ extends AnyPalpableContent<D, __>
-	> void writeNav(
+	public static void writeNav(
 		ServletRequest request,
-		__ content,
+		AnyPalpableContent<?, ?> content,
 		ElementContext context,
 		Nav nav,
 		PageIndex pageIndex
@@ -163,12 +150,9 @@ final public class SectionHtmlRenderer {
 		writeSectioningContent(request, content, context, nav, sectioningContent -> sectioningContent.nav(), pageIndex);
 	}
 
-	public static <
-		D extends AnyDocument<D>,
-		__ extends AnyPalpableContent<D, __>
-	> void writeSection(
+	public static void writeSection(
 		ServletRequest request,
-		__ content,
+		AnyPalpableContent<?, ?> content,
 		ElementContext context,
 		Section section,
 		PageIndex pageIndex
