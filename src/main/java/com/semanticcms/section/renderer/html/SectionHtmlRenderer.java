@@ -70,7 +70,7 @@ final public class SectionHtmlRenderer {
 		if(tocDonePerPage.putIfAbsent(page, true) == null) {
 			context.include(
 				"/semanticcms-section-renderer-html/toc.inc.jspx",
-				content.getDocument().getUnsafe(),
+				content.getUnsafe(),
 				Collections.singletonMap("page", page)
 			);
 		}
@@ -124,7 +124,7 @@ final public class SectionHtmlRenderer {
 			BufferResult body = sectioningContent.getBody();
 			if(body.getLength() > 0) {
 				section.div().clazz(clazz -> clazz.append("semanticcms-section-h").append((char)('0' + sectioningLevel)).append("-content")).__(div ->
-					body.writeTo(new NodeBodyWriter(sectioningContent, div.getDocument().getUnsafe(), context))
+					body.writeTo(new NodeBodyWriter(sectioningContent, div.getUnsafe(), context))
 				);
 			}
 		});
