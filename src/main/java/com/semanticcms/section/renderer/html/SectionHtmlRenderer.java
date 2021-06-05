@@ -22,13 +22,13 @@
  */
 package com.semanticcms.section.renderer.html;
 
-import com.aoindustries.html.any.AnyFlowContent;
-import com.aoindustries.html.any.AnyHeadingContent;
-import com.aoindustries.html.any.AnyPalpableContent;
-import com.aoindustries.html.any.AnySectioningContent;
-import com.aoindustries.html.any.NormalText;
-import com.aoindustries.io.buffer.BufferResult;
-import com.aoindustries.io.function.IOFunction;
+import com.aoapps.html.any.AnyFlowContent;
+import com.aoapps.html.any.AnyHeadingContent;
+import com.aoapps.html.any.AnyPalpableContent;
+import com.aoapps.html.any.AnySectioningContent;
+import com.aoapps.html.any.NormalText;
+import com.aoapps.io.buffer.BufferResult;
+import com.aoapps.lang.io.function.IOFunction;
 import com.semanticcms.core.model.ElementContext;
 import com.semanticcms.core.model.NodeBodyWriter;
 import com.semanticcms.core.model.Page;
