@@ -45,7 +45,7 @@ along with semanticcms-section-renderer-html.  If not, see <http://www.gnu.org/l
 				version="@{project.version}"
 				groupId="@{project.groupId}"
 				artifactId="@{documented.artifactId}"
-				repository="https://oss.sonatype.org/content/repositories/snapshots/"
+				repository="@{nexusUrl}content/repositories/snapshots/"
 				scmUrl="@{project.scm.url}"
 			>
 				<ul>
