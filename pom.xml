@@ -37,7 +37,7 @@ along with semanticcms-section-renderer-html.  If not, see <http://www.gnu.org/l
 		<javadoc.breadcrumbs><![CDATA[<a target="${javadoc.target}" href="https://semanticcms.com/">SemanticCMS</a>
 / <a target="${javadoc.target}" href="https://semanticcms.com/section/">Section</a>
 / <a target="${javadoc.target}" href="${project.url}">Renderer HTML</a>]]></javadoc.breadcrumbs>
-		<!-- SonarCloud.io -->
+		<!-- SonarQube -->
 		<sonar.projectKey>${project.groupId}:${project.artifactId}</sonar.projectKey>
 		<sonar.organization>aoindustries</sonar.organization>
 		<sonar.host.url>https://sonarcloud.io</sonar.host.url>
