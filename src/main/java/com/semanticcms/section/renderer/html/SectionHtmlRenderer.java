@@ -29,6 +29,7 @@ import com.aoapps.html.any.AnySectioningContent;
 import com.aoapps.html.any.NormalText;
 import com.aoapps.io.buffer.BufferResult;
 import com.aoapps.lang.io.function.IOFunction;
+import com.aoapps.servlet.attribute.ScopeEE;
 import com.semanticcms.core.model.ElementContext;
 import com.semanticcms.core.model.NodeBodyWriter;
 import com.semanticcms.core.model.Page;
@@ -48,7 +49,8 @@ import javax.servlet.jsp.SkipPageException;
 // TODO: Implement with https://www.w3.org/TR/wai-aria-1.1/#aria-label
 final public class SectionHtmlRenderer {
 
-	private static final String TOC_DONE_PER_PAGE_REQUEST_ATTRIBUTE = SectionHtmlRenderer.class.getName() + ".tocDonePerPage";
+	private static final ScopeEE.Request.Attribute<Map<Page, Boolean>> TOC_DONE_PER_PAGE_REQUEST_ATTRIBUTE =
+		ScopeEE.REQUEST.attribute(SectionHtmlRenderer.class.getName() + ".tocDonePerPage");
 
 	/**
 	 * Writes the table of contents, if needed and not yet written on the page.
@@ -61,12 +63,8 @@ final public class SectionHtmlRenderer {
 		ElementContext context,
 		Page page
 	) throws Exception {
-		@SuppressWarnings("unchecked")
-		Map<Page, Boolean> tocDonePerPage = (Map<Page, Boolean>)request.getAttribute(TOC_DONE_PER_PAGE_REQUEST_ATTRIBUTE);
-		if(tocDonePerPage == null) {
-			tocDonePerPage = new IdentityHashMap<>();
-			request.setAttribute(TOC_DONE_PER_PAGE_REQUEST_ATTRIBUTE, tocDonePerPage);
-		}
+		Map<Page, Boolean> tocDonePerPage = TOC_DONE_PER_PAGE_REQUEST_ATTRIBUTE.context(request)
+			.computeIfAbsent(__ -> new IdentityHashMap<>());
 		if(tocDonePerPage.putIfAbsent(page, true) == null) {
 			context.include(
 				"/semanticcms-section-renderer-html/toc.inc.jspx",
