@@ -47,7 +47,7 @@ import javax.servlet.ServletRequest;
 import javax.servlet.jsp.SkipPageException;
 
 // TODO: Implement with https://www.w3.org/TR/wai-aria-1.1/#aria-label
-final public class SectionHtmlRenderer {
+public final class SectionHtmlRenderer {
 
 	private static final ScopeEE.Request.Attribute<Map<Page, Boolean>> TOC_DONE_PER_PAGE_REQUEST_ATTRIBUTE =
 		ScopeEE.REQUEST.attribute(SectionHtmlRenderer.class.getName() + ".tocDonePerPage");
