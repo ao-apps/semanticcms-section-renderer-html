@@ -135,7 +135,7 @@ public final class SectionHtmlRenderer {
 		Aside aside,
 		PageIndex pageIndex
 	) throws IOException, ServletException, SkipPageException {
-		writeSectioningContent(request, content, context, aside, sectioningContent -> sectioningContent.aside(), pageIndex);
+		writeSectioningContent(request, content, context, aside, AnySectioningContent::aside, pageIndex);
 	}
 
 	public static void writeNav(
@@ -145,7 +145,7 @@ public final class SectionHtmlRenderer {
 		Nav nav,
 		PageIndex pageIndex
 	) throws IOException, ServletException, SkipPageException {
-		writeSectioningContent(request, content, context, nav, sectioningContent -> sectioningContent.nav(), pageIndex);
+		writeSectioningContent(request, content, context, nav, AnySectioningContent::nav, pageIndex);
 	}
 
 	public static void writeSection(
@@ -155,7 +155,7 @@ public final class SectionHtmlRenderer {
 		Section section,
 		PageIndex pageIndex
 	) throws IOException, ServletException, SkipPageException {
-		writeSectioningContent(request, content, context, section, sectioningContent -> sectioningContent.section(), pageIndex);
+		writeSectioningContent(request, content, context, section, AnySectioningContent::section, pageIndex);
 	}
 
 	/**
