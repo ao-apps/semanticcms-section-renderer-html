@@ -99,9 +99,6 @@ along with semanticcms-section-renderer-html.  If not, see <https://www.gnu.org/
 			<releases>
 				<enabled>false</enabled>
 			</releases>
-			<snapshots>
-				<enabled>true</enabled>
-			</snapshots>
 		</repository>
 	</repositories>
 
