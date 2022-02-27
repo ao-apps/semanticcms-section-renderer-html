@@ -1,6 +1,6 @@
 /*
  * semanticcms-section-renderer-html - Sections rendered as HTML in a Servlet environment.
- * Copyright (C) 2013, 2014, 2015, 2016, 2017, 2019, 2020, 2021  AO Industries, Inc.
+ * Copyright (C) 2013, 2014, 2015, 2016, 2017, 2019, 2020, 2021, 2022  AO Industries, Inc.
  *     support@aoindustries.com
  *     7262 Bull Pen Cir
  *     Mobile, AL 36695
@@ -47,7 +47,7 @@ import javax.servlet.ServletRequest;
 import javax.servlet.jsp.SkipPageException;
 
 // TODO: Implement with https://www.w3.org/TR/wai-aria-1.1/#aria-label
-public abstract class SectionHtmlRenderer {
+public final class SectionHtmlRenderer {
 
 	/** Make no instances. */
 	private SectionHtmlRenderer() {throw new AssertionError();}
