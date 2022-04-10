@@ -39,6 +39,7 @@ import com.semanticcms.section.model.Nav;
 import com.semanticcms.section.model.Section;
 import com.semanticcms.section.model.SectioningContent;
 import java.io.IOException;
+import java.io.Writer;
 import java.util.Collections;
 import java.util.IdentityHashMap;
 import java.util.Map;
@@ -69,9 +70,11 @@ public final class SectionHtmlRenderer {
 		Map<Page, Boolean> tocDonePerPage = TOC_DONE_PER_PAGE_REQUEST_ATTRIBUTE.context(request)
 			.computeIfAbsent(__ -> new IdentityHashMap<>());
 		if(tocDonePerPage.putIfAbsent(page, true) == null) {
+			@SuppressWarnings("deprecation")
+			Writer unsafe = content.getRawUnsafe();
 			context.include(
 				"/semanticcms-section-renderer-html/toc.inc.jspx",
-				content.getUnsafe(),
+				unsafe,
 				Collections.singletonMap("page", page)
 			);
 		}
@@ -124,9 +127,11 @@ public final class SectionHtmlRenderer {
 			section.h__(sectioningLevel, sectioningContent);
 			BufferResult body = sectioningContent.getBody();
 			if(body.getLength() > 0) {
-				section.div().clazz(clazz -> clazz.append("semanticcms-section-h").append((char)('0' + sectioningLevel)).append("-content")).__(div ->
-					body.writeTo(new NodeBodyWriter(sectioningContent, div.getUnsafe(), context))
-				);
+				section.div().clazz(clazz -> clazz.append("semanticcms-section-h").append((char)('0' + sectioningLevel)).append("-content")).__(div -> {
+					@SuppressWarnings("deprecation")
+					Writer unsafe = div.getRawUnsafe();
+					body.writeTo(new NodeBodyWriter(sectioningContent, unsafe, context));
+				});
 			}
 		});
 	}
