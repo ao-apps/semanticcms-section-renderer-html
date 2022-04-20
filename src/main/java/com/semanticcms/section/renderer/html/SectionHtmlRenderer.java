@@ -51,119 +51,125 @@ import javax.servlet.jsp.SkipPageException;
 // TODO: Implement with https://www.w3.org/TR/wai-aria-1.1/#aria-label
 public final class SectionHtmlRenderer {
 
-	/** Make no instances. */
-	private SectionHtmlRenderer() {throw new AssertionError();}
+  /** Make no instances. */
+  private SectionHtmlRenderer() {
+    throw new AssertionError();
+  }
 
-	private static final ScopeEE.Request.Attribute<Map<Page, Boolean>> TOC_DONE_PER_PAGE_REQUEST_ATTRIBUTE =
-		ScopeEE.REQUEST.attribute(SectionHtmlRenderer.class.getName() + ".tocDonePerPage");
+  private static final ScopeEE.Request.Attribute<Map<Page, Boolean>> TOC_DONE_PER_PAGE_REQUEST_ATTRIBUTE =
+    ScopeEE.REQUEST.attribute(SectionHtmlRenderer.class.getName() + ".tocDonePerPage");
 
-	/**
-	 * Writes the table of contents, if needed and not yet written on the page.
-	 * The determination of whether needed on the page is only performed once per page, with the result cached in a
-	 * request attribute.
-	 */
-	public static void writeToc(
-		ServletRequest request,
-		AnySectioningContent<?, ?> content,
-		ElementContext context,
-		Page page
-	) throws Exception {
-		Map<Page, Boolean> tocDonePerPage = TOC_DONE_PER_PAGE_REQUEST_ATTRIBUTE.context(request)
-			.computeIfAbsent(__ -> new IdentityHashMap<>());
-		if(tocDonePerPage.putIfAbsent(page, true) == null) {
-			@SuppressWarnings("deprecation")
-			Writer unsafe = content.getRawUnsafe();
-			context.include(
-				"/semanticcms-section-renderer-html/toc.inc.jspx",
-				unsafe,
-				Collections.singletonMap("page", page)
-			);
-		}
-	}
+  /**
+   * Writes the table of contents, if needed and not yet written on the page.
+   * The determination of whether needed on the page is only performed once per page, with the result cached in a
+   * request attribute.
+   */
+  public static void writeToc(
+    ServletRequest request,
+    AnySectioningContent<?, ?> content,
+    ElementContext context,
+    Page page
+  ) throws Exception {
+    Map<Page, Boolean> tocDonePerPage = TOC_DONE_PER_PAGE_REQUEST_ATTRIBUTE.context(request)
+      .computeIfAbsent(__ -> new IdentityHashMap<>());
+    if (tocDonePerPage.putIfAbsent(page, true) == null) {
+      @SuppressWarnings("deprecation")
+      Writer unsafe = content.getRawUnsafe();
+      context.include(
+        "/semanticcms-section-renderer-html/toc.inc.jspx",
+        unsafe,
+        Collections.singletonMap("page", page)
+      );
+    }
+  }
 
-	/**
-	 * @param  content  {@link AnyPalpableContent} has both {@link AnyHeadingContent} and {@link AnySectioningContent}
-	 */
-	public static void writeSectioningContent(
-		ServletRequest request,
-		AnyPalpableContent<?, ?> content,
-		ElementContext context,
-		SectioningContent sectioningContent,
-		IOFunction<AnySectioningContent<?, ?>, NormalText<?, ?, ?, ? extends AnyFlowContent<?, ?>, ?>> htmlElement,
-		PageIndex pageIndex
-	) throws IOException, ServletException, SkipPageException {
-		Page page = sectioningContent.getPage();
-		if(page != null) {
-			try {
-				writeToc(request, content, context, page);
-			} catch(Error | RuntimeException | IOException | ServletException | SkipPageException e) {
-				throw e;
-			} catch(Exception e) {
-				throw new ServletException(e);
-			}
-		}
-		// Count the sectioning level by finding all sectioning contents in the parent elements
-		int sectioningLevel; {
-			int sectioningLevel_ = 2; // <h1> is reserved for page titles
-			com.semanticcms.core.model.Element parentElement = sectioningContent.getParentElement();
-			while(parentElement != null) {
-				if(parentElement instanceof SectioningContent) sectioningLevel_++;
-				parentElement = parentElement.getParentElement();
-			}
-			// Highest tag is <h6>
-			if(sectioningLevel_ > 6) throw new IOException("Sectioning exceeded depth of h6 (including page as h1): sectioningLevel = " + sectioningLevel_);
-			sectioningLevel = sectioningLevel_;
-		}
+  /**
+   * @param  content  {@link AnyPalpableContent} has both {@link AnyHeadingContent} and {@link AnySectioningContent}
+   */
+  public static void writeSectioningContent(
+    ServletRequest request,
+    AnyPalpableContent<?, ?> content,
+    ElementContext context,
+    SectioningContent sectioningContent,
+    IOFunction<AnySectioningContent<?, ?>, NormalText<?, ?, ?, ? extends AnyFlowContent<?, ?>, ?>> htmlElement,
+    PageIndex pageIndex
+  ) throws IOException, ServletException, SkipPageException {
+    Page page = sectioningContent.getPage();
+    if (page != null) {
+      try {
+        writeToc(request, content, context, page);
+      } catch (Error | RuntimeException | IOException | ServletException | SkipPageException e) {
+        throw e;
+      } catch (Exception e) {
+        throw new ServletException(e);
+      }
+    }
+    // Count the sectioning level by finding all sectioning contents in the parent elements
+    int sectioningLevel; {
+      int sectioningLevel_ = 2; // <h1> is reserved for page titles
+      com.semanticcms.core.model.Element parentElement = sectioningContent.getParentElement();
+      while (parentElement != null) {
+        if (parentElement instanceof SectioningContent) {
+          sectioningLevel_++;
+        }
+        parentElement = parentElement.getParentElement();
+      }
+      // Highest tag is <h6>
+      if (sectioningLevel_ > 6) {
+        throw new IOException("Sectioning exceeded depth of h6 (including page as h1): sectioningLevel = " + sectioningLevel_);
+      }
+      sectioningLevel = sectioningLevel_;
+    }
 
-		String id = sectioningContent.getId();
-		htmlElement.apply(content)
-			.id((id == null) ? null : idAttr -> PageIndex.appendIdInPage(
-				pageIndex,
-				page,
-				id,
-				idAttr
-			))
-			.clazz("semanticcms-section")
-		.__(section -> {
-			section.h__(sectioningLevel, sectioningContent);
-			BufferResult body = sectioningContent.getBody();
-			if(body.getLength() > 0) {
-				section.div().clazz(clazz -> clazz.append("semanticcms-section-h").append((char)('0' + sectioningLevel)).append("-content")).__(div -> {
-					@SuppressWarnings("deprecation")
-					Writer unsafe = div.getRawUnsafe();
-					body.writeTo(new NodeBodyWriter(sectioningContent, unsafe, context));
-				});
-			}
-		});
-	}
+    String id = sectioningContent.getId();
+    htmlElement.apply(content)
+      .id((id == null) ? null : idAttr -> PageIndex.appendIdInPage(
+        pageIndex,
+        page,
+        id,
+        idAttr
+      ))
+      .clazz("semanticcms-section")
+    .__(section -> {
+      section.h__(sectioningLevel, sectioningContent);
+      BufferResult body = sectioningContent.getBody();
+      if (body.getLength() > 0) {
+        section.div().clazz(clazz -> clazz.append("semanticcms-section-h").append((char)('0' + sectioningLevel)).append("-content")).__(div -> {
+          @SuppressWarnings("deprecation")
+          Writer unsafe = div.getRawUnsafe();
+          body.writeTo(new NodeBodyWriter(sectioningContent, unsafe, context));
+        });
+      }
+    });
+  }
 
-	public static void writeAside(
-		ServletRequest request,
-		AnyPalpableContent<?, ?> content,
-		ElementContext context,
-		Aside aside,
-		PageIndex pageIndex
-	) throws IOException, ServletException, SkipPageException {
-		writeSectioningContent(request, content, context, aside, AnySectioningContent::aside, pageIndex);
-	}
+  public static void writeAside(
+    ServletRequest request,
+    AnyPalpableContent<?, ?> content,
+    ElementContext context,
+    Aside aside,
+    PageIndex pageIndex
+  ) throws IOException, ServletException, SkipPageException {
+    writeSectioningContent(request, content, context, aside, AnySectioningContent::aside, pageIndex);
+  }
 
-	public static void writeNav(
-		ServletRequest request,
-		AnyPalpableContent<?, ?> content,
-		ElementContext context,
-		Nav nav,
-		PageIndex pageIndex
-	) throws IOException, ServletException, SkipPageException {
-		writeSectioningContent(request, content, context, nav, AnySectioningContent::nav, pageIndex);
-	}
+  public static void writeNav(
+    ServletRequest request,
+    AnyPalpableContent<?, ?> content,
+    ElementContext context,
+    Nav nav,
+    PageIndex pageIndex
+  ) throws IOException, ServletException, SkipPageException {
+    writeSectioningContent(request, content, context, nav, AnySectioningContent::nav, pageIndex);
+  }
 
-	public static void writeSection(
-		ServletRequest request,
-		AnyPalpableContent<?, ?> content,
-		ElementContext context,
-		Section section,
-		PageIndex pageIndex
-	) throws IOException, ServletException, SkipPageException {
-		writeSectioningContent(request, content, context, section, AnySectioningContent::section, pageIndex);
-	}
+  public static void writeSection(
+    ServletRequest request,
+    AnyPalpableContent<?, ?> content,
+    ElementContext context,
+    Section section,
+    PageIndex pageIndex
+  ) throws IOException, ServletException, SkipPageException {
+    writeSectioningContent(request, content, context, section, AnySectioningContent::section, pageIndex);
+  }
 }
