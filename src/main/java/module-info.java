@@ -36,4 +36,4 @@ module com.semanticcms.section.renderer.html {
   requires com.semanticcms.core.taglib; // <groupId>com.semanticcms</groupId><artifactId>semanticcms-core-taglib</artifactId>
   requires com.semanticcms.section.model; // <groupId>com.semanticcms</groupId><artifactId>semanticcms-section-model</artifactId>
   requires taglibs.standard.spec; // <groupId>org.apache.taglibs</groupId><artifactId>taglibs-standard-spec</artifactId>
-}
+} // TODO: Avoiding rewrite-maven-plugin-4.22.2 truncation
