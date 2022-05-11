@@ -48,7 +48,12 @@ import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.jsp.SkipPageException;
 
-// TODO: Implement with https://www.w3.org/TR/wai-aria-1.1/#aria-label
+/**
+ * Writes sections as HTML.
+ * <p>
+ * TODO: Implement with https://www.w3.org/TR/wai-aria-1.1/#aria-label
+ * </p>
+ */
 public final class SectionHtmlRenderer {
 
   /** Make no instances. */
@@ -71,7 +76,7 @@ public final class SectionHtmlRenderer {
       Page page
   ) throws Exception {
     Map<Page, Boolean> tocDonePerPage = TOC_DONE_PER_PAGE_REQUEST_ATTRIBUTE.context(request)
-        .computeIfAbsent(__ -> new IdentityHashMap<>());
+        .computeIfAbsent(name -> new IdentityHashMap<>());
     if (tocDonePerPage.putIfAbsent(page, true) == null) {
       @SuppressWarnings("deprecation")
       Writer unsafe = content.getRawUnsafe();
@@ -84,6 +89,8 @@ public final class SectionHtmlRenderer {
   }
 
   /**
+   * Writes the given section.
+   *
    * @param  content  {@link AnyPalpableContent} has both {@link AnyHeadingContent} and {@link AnySectioningContent}
    */
   public static void writeSectioningContent(
@@ -106,21 +113,21 @@ public final class SectionHtmlRenderer {
     }
     // Count the sectioning level by finding all sectioning contents in the parent elements
     int sectioningLevel;
-    {
-      int sectioningLevel_ = 2; // <h1> is reserved for page titles
-      com.semanticcms.core.model.Element parentElement = sectioningContent.getParentElement();
-      while (parentElement != null) {
-        if (parentElement instanceof SectioningContent) {
-          sectioningLevel_++;
+      {
+        int sectioningLevelTmp = 2; // <h1> is reserved for page titles
+        com.semanticcms.core.model.Element parentElement = sectioningContent.getParentElement();
+        while (parentElement != null) {
+          if (parentElement instanceof SectioningContent) {
+            sectioningLevelTmp++;
+          }
+          parentElement = parentElement.getParentElement();
         }
-        parentElement = parentElement.getParentElement();
+        // Highest tag is <h6>
+        if (sectioningLevelTmp > 6) {
+          throw new IOException("Sectioning exceeded depth of h6 (including page as h1): sectioningLevel = " + sectioningLevelTmp);
+        }
+        sectioningLevel = sectioningLevelTmp;
       }
-      // Highest tag is <h6>
-      if (sectioningLevel_ > 6) {
-        throw new IOException("Sectioning exceeded depth of h6 (including page as h1): sectioningLevel = " + sectioningLevel_);
-      }
-      sectioningLevel = sectioningLevel_;
-    }
 
     String id = sectioningContent.getId();
     htmlElement.apply(content)
