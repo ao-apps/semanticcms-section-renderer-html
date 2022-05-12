@@ -126,6 +126,13 @@ along with semanticcms-section-renderer-html.  If not, see <https://www.gnu.org/
           </usedDependencies>
         </configuration>
       </plugin>
+      <plugin>
+        <groupId>com.github.spotbugs</groupId><artifactId>spotbugs-maven-plugin</artifactId>
+        <configuration>
+          <!-- TODO: Clean-up SpotBugs -->
+          <failOnError>false</failOnError>
+        </configuration>
+      </plugin>
     </plugins>
   </build>
 
