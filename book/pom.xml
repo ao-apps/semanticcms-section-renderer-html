@@ -33,6 +33,7 @@ along with semanticcms-section-renderer-html.  If not, see <https://www.gnu.org/
   <packaging>bundle</packaging>
 
   <properties>
+    <project.build.outputTimestamp>2023-02-08T21:06:04Z</project.build.outputTimestamp>
     <module.name>com.semanticcms.section.renderer.html.book</module.name>
     <!-- These values are copied from the project being documented -->
     <documented.artifactId>semanticcms-section-renderer-html</documented.artifactId>
