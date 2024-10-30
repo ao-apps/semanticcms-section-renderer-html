@@ -50,9 +50,8 @@ import javax.servlet.jsp.SkipPageException;
 
 /**
  * Writes sections as HTML.
- * <p>
- * TODO: Implement with https://www.w3.org/TR/wai-aria-1.1/#aria-label
- * </p>
+ *
+ * <p>TODO: Implement with https://www.w3.org/TR/wai-aria-1.1/#aria-label</p>
  */
 public final class SectionHtmlRenderer {
 
