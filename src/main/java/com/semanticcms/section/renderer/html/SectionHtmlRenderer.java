@@ -1,6 +1,6 @@
 /*
  * semanticcms-section-renderer-html - Sections rendered as HTML in a Servlet environment.
- * Copyright (C) 2013, 2014, 2015, 2016, 2017, 2019, 2020, 2021, 2022, 2024  AO Industries, Inc.
+ * Copyright (C) 2013, 2014, 2015, 2016, 2017, 2019, 2020, 2021, 2022, 2024, 2025  AO Industries, Inc.
  *     support@aoindustries.com
  *     7262 Bull Pen Cir
  *     Mobile, AL 36695
@@ -112,21 +112,21 @@ public final class SectionHtmlRenderer {
     }
     // Count the sectioning level by finding all sectioning contents in the parent elements
     int sectioningLevel;
-      {
-        int sectioningLevelTmp = 2; // <h1> is reserved for page titles
-        com.semanticcms.core.model.Element parentElement = sectioningContent.getParentElement();
-        while (parentElement != null) {
-          if (parentElement instanceof SectioningContent) {
-            sectioningLevelTmp++;
-          }
-          parentElement = parentElement.getParentElement();
+    {
+      int sectioningLevelTmp = 2; // <h1> is reserved for page titles
+      com.semanticcms.core.model.Element parentElement = sectioningContent.getParentElement();
+      while (parentElement != null) {
+        if (parentElement instanceof SectioningContent) {
+          sectioningLevelTmp++;
         }
-        // Highest tag is <h6>
-        if (sectioningLevelTmp > 6) {
-          throw new IOException("Sectioning exceeded depth of h6 (including page as h1): sectioningLevel = " + sectioningLevelTmp);
-        }
-        sectioningLevel = sectioningLevelTmp;
+        parentElement = parentElement.getParentElement();
       }
+      // Highest tag is <h6>
+      if (sectioningLevelTmp > 6) {
+        throw new IOException("Sectioning exceeded depth of h6 (including page as h1): sectioningLevel = " + sectioningLevelTmp);
+      }
+      sectioningLevel = sectioningLevelTmp;
+    }
 
     String id = sectioningContent.getId();
     htmlElement.apply(content)
