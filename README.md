@@ -23,7 +23,7 @@ Sections rendered as HTML in a Servlet environment.
 * [Project Home](https://semanticcms.com/section/renderer/html/)
 * [Changelog](https://semanticcms.com/section/renderer/html/changelog)
 * [API Docs](https://semanticcms.com/section/renderer/html/apidocs/)
-* [Maven Central Repository](https://central.sonatype.com/artifact/com.semanticcms/semanticcms-section-renderer-html)
+* [Central Repository](https://central.sonatype.com/artifact/com.semanticcms/semanticcms-section-renderer-html)
 * [GitHub](https://github.com/ao-apps/semanticcms-section-renderer-html)
 
 ## Contact Us
