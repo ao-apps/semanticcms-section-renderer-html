@@ -1,6 +1,6 @@
 /*
  * semanticcms-section-renderer-html - Sections rendered as HTML in a Servlet environment.
- * Copyright (C) 2013, 2014, 2015, 2016, 2017, 2019, 2020, 2021, 2022, 2024, 2025  AO Industries, Inc.
+ * Copyright (C) 2013, 2014, 2015, 2016, 2017, 2019, 2020, 2021, 2022, 2024, 2025, 2026  AO Industries, Inc.
  *     support@aoindustries.com
  *     7262 Bull Pen Cir
  *     Mobile, AL 36695
@@ -39,14 +39,14 @@ import com.semanticcms.section.model.Aside;
 import com.semanticcms.section.model.Nav;
 import com.semanticcms.section.model.Section;
 import com.semanticcms.section.model.SectioningContent;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.ServletRequest;
+import jakarta.servlet.jsp.SkipPageException;
 import java.io.IOException;
 import java.io.Writer;
 import java.util.Collections;
 import java.util.IdentityHashMap;
 import java.util.Map;
-import javax.servlet.ServletException;
-import javax.servlet.ServletRequest;
-import javax.servlet.jsp.SkipPageException;
 
 /**
  * Writes sections as HTML.
