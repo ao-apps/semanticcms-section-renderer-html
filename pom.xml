@@ -261,7 +261,7 @@ along with semanticcms-section-renderer-html.  If not, see <https://www.gnu.org/
         <groupId>com.aoapps</groupId><artifactId>ao-lang</artifactId><version>5.7.0${POST-SNAPSHOT}</version>
       </dependency>
       <dependency>
-        <groupId>com.aoapps</groupId><artifactId>ao-servlet-util</artifactId><version>6.0.0${POST-SNAPSHOT}</version>
+        <groupId>com.aoapps</groupId><artifactId>ao-servlet-util</artifactId><version>6.0.1-SNAPSHOT<!-- ${POST-SNAPSHOT} --></version>
       </dependency>
       <dependency>
         <groupId>com.aoapps</groupId><artifactId>ao-taglib</artifactId><version>10.0.0${POST-SNAPSHOT}</version>
@@ -352,8 +352,6 @@ along with semanticcms-section-renderer-html.  If not, see <https://www.gnu.org/
       <dependency>
         <groupId>com.semanticcms</groupId><artifactId>semanticcms-core-servlet</artifactId><version>3.0.0-SNAPSHOT<!-- ${POST-SNAPSHOT} --></version>
       </dependency>
-      <!-- Runtime Direct -->
-      <!-- jakartaee-web-profile-bom: <groupId>org.glassfish.web</groupId><artifactId>jakarta.servlet.jsp.jstl</artifactId> -->
       <!-- Imports -->
       <dependency>
         <groupId>com.aoapps</groupId><artifactId>jakartaee-web-profile-bom</artifactId><version>10.0.0${POST-SNAPSHOT}</version>
@@ -403,11 +401,6 @@ along with semanticcms-section-renderer-html.  If not, see <https://www.gnu.org/
     </dependency>
     <dependency>
       <groupId>jakarta.servlet.jsp.jstl</groupId><artifactId>jakarta.servlet.jsp.jstl-api</artifactId>
-    </dependency>
-    <!-- Runtime Direct -->
-    <dependency>
-      <groupId>org.glassfish.web</groupId><artifactId>jakarta.servlet.jsp.jstl</artifactId>
-      <scope>runtime</scope>
     </dependency>
   </dependencies>
 </project>

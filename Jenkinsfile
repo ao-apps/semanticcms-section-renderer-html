@@ -42,9 +42,6 @@ binding.setVariable('upstreamProjects', [
   'model', // <groupId>com.semanticcms</groupId><artifactId>semanticcms-section-model</artifactId>
   // No Jenkins: <groupId>jakarta.servlet.jsp.jstl</groupId><artifactId>jakarta.servlet.jsp.jstl-api</artifactId>
 
-  // Runtime Direct
-  // No Jenkins: <groupId>org.glassfish.web</groupId><artifactId>jakarta.servlet.jsp.jstl</artifactId>
-
   // BOM
   '../../oss/jakartaee-web-profile-bom', // <groupId>com.aoapps</groupId><artifactId>jakartaee-web-profile-bom</artifactId>
 ])
